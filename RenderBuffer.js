@@ -1,6 +1,5 @@
-import Polygon from "https://f1redude123.github.io/PlayGround/Polygon.js";
-import Vector2 from "https://f1redude123.github.io/PlayGround/Vector2.js";
-import Color from "https://f1redude123.github.io/PlayGround/Color.js";
+import Polygon from "https://f1redude123.github.io/Vecter/Polygon.js";
+import Vector2 from "https://f1redude123.github.io/Vecter/Vector2.js";
 
 export default class RenderBuffer {
   vertices=[];
