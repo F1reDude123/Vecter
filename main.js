@@ -1,8 +1,8 @@
-import Vector3 from "https://f1redude123.github.io/PlayGround/Vector3.js";
-import Vector2 from "https://f1redude123.github.io/PlayGround/Vector2.js";
-import Transform from "https://f1redude123.github.io/PlayGround/Transform.js";
-import Polygon from "https://f1redude123.github.io/PlayGround/Polygon.js";
-import RenderBuffer from "https://f1redude123.github.io/PlayGround/RenderBuffer.js";
+import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
+import Vector2 from "https://f1redude123.github.io/Vecter/Vector2.js";
+import Transform from "https://f1redude123.github.io/Vecter/Transform.js";
+import Polygon from "https://f1redude123.github.io/Vecter/Polygon.js";
+import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
 
 export default class Scene {
   buffers = [];
