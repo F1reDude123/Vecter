@@ -3,6 +3,6 @@ export default class DynamicBase {
     this.tick();
   }
   static tick() {
-    requestAnimationFrame(this.tick);
+    requestAnimationFrame(() => this.tick());
   }
 }
