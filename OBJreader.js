@@ -5,7 +5,7 @@ export default class OBJreader {
   static readText(t) {
     var verts = [];
     var inds = [];
-    text.split("\n").forEach(function(e) {
+    t.split("\n").forEach(function(e) {
       switch (e[0]) {
         case "v":
           var points = e.substring(2, e.length).split(" ");
@@ -14,11 +14,17 @@ export default class OBJreader {
         case "f":
           var points = e.substring(2, e.length).split(" ");
           if (points.length == 3) {
-            inds.push(new Vector3(parseFloat(points[0]), parseFloat(points[1]), parseFloat(points[2])));
+            inds.push(parseInt(points[0])-1);
+            inds.push(parseInt(points[1])-1);
+            inds.push(parseInt(points[2])-1);
           }
           else {
-            inds.push(new Vector3(parseFloat(points[0]), parseFloat(points[1]), parseFloat(points[2])));
-            inds.push(new Vector3(parseFloat(points[2]), parseFloat(points[3]), parseFloat(points[0])));
+            inds.push(parseInt(points[0])-1);
+            inds.push(parseInt(points[1])-1);
+            inds.push(parseInt(points[2])-1);
+            inds.push(parseInt(points[2])-1);
+            inds.push(parseInt(points[3])-1);
+            inds.push(parseInt(points[0])-1);
           }
       }
     });
