@@ -29,7 +29,7 @@
     static tick() {
     	fetch(`https://f1redude123.github.io/Vecter/OBJs/${model}.obj`).then(e => e.text()).then(t => {
         var obj = OBJreader.readText(t);
-        var verts = obj.getVerts().map(e => e.mult(new Vector3(model!="Mesh_Rat"?100:1, model!="Mesh_Rat"?100:1, model!="Mesh_Rat"?100:1))rotateY(performance.now()/100));
+        var verts = obj.getVerts().map(e => e.mult(new Vector3(model!="Mesh_Rat"?100:1, model!="Mesh_Rat"?100:1, model!="Mesh_Rat"?100:1)).rotateY(performance.now()/100));
         var inds = obj.getInds();
   
         scene.loadBuffer(0, verts, inds);
