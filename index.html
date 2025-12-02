@@ -1,135 +1,81 @@
 <!DOCTYPE html>
 <html>
 	<head>
-    <title>PlayGround Demo</title>
-      <link rel="icon" type="image/png" href="https://f1redude123.github.io/PlayGround/PlayGround.png">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto">
-      <style>
-        body {
-          font-family:"Roboto";
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-        }
-      </style>
-    </head>
-    <body>
-      <h1>PlayGround demo</h1>
-      <p>Move the sliders to rotate and move the cube around!</p>
-      <div id="container"></div>
-      <div style="display: flex; flex-direction: row; gap: 20px;">
-        <div>
-          <label>X position</label>
-          <input type="range" min="-300" max="300" value="0" id="xPos">
-          <br>
-          <label>Y position</label>
-          <input type="range" min="-300" max="300" value="0" id="yPos">
-          <br>
-          <label>Z position</label>
-          <input type="range" min="-300" max="300" value="0" id="zPos">
-        </div>
-        <div>
-          <label>X rotation</label>
-          <input type="range" min="0" max="360" value="0" id="xRot">
-          <br>
-          <label>Y rotation</label>
-          <input type="range" min="0" max="360" value="0" id="yRot">
-          <br>
-          <label>Z rotation</label>
-          <input type="range" min="0" max="360" value="0" id="zRot">
-        </div>
-      </div>
-    </body>
-    <script type="module">
-    import Scene from "https://f1redude123.github.io/PlayGround/main.js?v=2";
-    import Vector3 from "https://f1redude123.github.io/PlayGround/Vector3.js";
-    import Utils from "https://f1redude123.github.io/PlayGround/Utils.js";
+    <title>Vecter Demo</title>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto">
+		<style>
+			body {
+				font-family:"Roboto";
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Vecter demo</h1>
+		<p>Move the sliders to rotate and move the rat around!</p>
+		<div id="container"></div>
+		<div style="display: flex; flex-direction: row; gap: 20px;">
+			<div>
+				<label>X position</label>
+				<input type="range" min="-300" max="300" value="0" oninput="xPos = parseInt(this.value)">
+				<br>
+				<label>Y position</label>
+				<input type="range" min="-300" max="300" value="0" oninput="yPos = parseInt(this.value)">
+				<br>
+				<label>Z position</label>
+				<input type="range" min="-300" max="300" value="0" oninput="zPos = parseInt(this.value)">
+			</div>
+			<div>
+				<label>X rotation</label>
+				<input type="range" min="0" max="360" value="0" oninput="xRot = parseInt(this.value)">
+				<br>
+				<label>Y rotation</label>
+				<input type="range" min="0" max="360" value="0" oninput="yRot = parseInt(this.value)">
+				<br>
+				<label>Z rotation</label>
+				<input type="range" min="0" max="360" value="0" oninput="zRot = parseInt(this.value)">
+			</div>
+		</div>
+	</body>
+	<script type="module">
+		import Scene from "https://f1redude123.github.io/Vecter/main.js";
+		import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
+		import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
+		import DynamicBase from "https://f1redude123.github.io/Vecter/DynamicBase.js";
+		import OBJreader from "https://f1redude123.github.io/Vecter/OBJreader.js";
 
-    // Scene initialization
-    var scene=new Scene(400, 400, document.getElementById("container"));
-
-    // Create render buffer
-    scene.createBuffer();
-
-    var xPos = 0;
-    var yPos = 0;
-    var zPos = 0;
-
-    var xRot = 0;
-    var yRot = 0;
-    var zRot = 0;
-
-    document.getElementById("xPos").addEventListener("input", function() {
-      xPos = parseInt(this.value);
-    });
-    document.getElementById("yPos").addEventListener("input", function() {
-      yPos = parseInt(this.value);
-    });
-    document.getElementById("zPos").addEventListener("input", function() {
-      zPos = parseInt(this.value);
-    });
-
-    document.getElementById("xRot").addEventListener("input", function() {
-      xRot = parseInt(this.value);
-    });
-    document.getElementById("yRot").addEventListener("input", function() {
-      yRot = parseInt(this.value);
-    });
-    document.getElementById("zRot").addEventListener("input", function() {
-      zRot = parseInt(this.value);
-    });
-
-    setInterval(function() {
-      // Define vertices and indices
-      var verts = [
-        new Vector3(-100, 100, 100).add(new Vector3(xPos, yPos, zPos)),
-        new Vector3(100, 100, 100).add(new Vector3(xPos, yPos, zPos)),
-        new Vector3(100, 100, -100).add(new Vector3(xPos, yPos, zPos)),
-        new Vector3(-100, 100, -100).add(new Vector3(xPos, yPos, zPos)),
-
-        new Vector3(-100, -100, 100).add(new Vector3(xPos, yPos, zPos)),
-        new Vector3(100, -100, 100).add(new Vector3(xPos, yPos, zPos)),
-        new Vector3(100, -100, -100).add(new Vector3(xPos, yPos, zPos)),
-        new Vector3(-100, -100, -100).add(new Vector3(xPos, yPos, zPos))
-      ];
-
-      var inds = [
-        0, 1, 2, // Top
-        2, 3, 0,
-
-        4, 5, 6, // Bottom
-        6, 7, 4,
-
-        2, 1, 5, // Right
-        5, 6, 2,
-
-        3, 0, 4, // Left
-        4, 7, 3,
-
-        1, 0, 4, // Back
-        4, 5, 1,
-
-        3, 2, 6, // Front
-        6, 7, 3
-      ];
-
-      // Load model data into buffer 0
-      scene.loadBuffer(0, verts, inds);
-
-      // Rotate render buffer
-      scene.getBuffer(0).getBufferProperties.rotate(
-        new Vector3(
-          Utils.degToRad(xRot),
-          Utils.degToRad(yRot),
-          Utils.degToRad(zRot)
-        )
-      );
-
-      scene.ctx.fillStyle = "#f00";
-
-      // Render buffer 0
-      scene.renderBuffer(0);
-    }, 10);
-    </script>
+		var xPos = 0;
+		var yPos = 0;
+		var zPos = 0;
+		var xRot = 0;
+		var yRot = 0;
+		var zRot = 0;
+		
+		var scene = new Scene(500, 300);
+		
+		scene.createBuffer();
+		
+		class GameRenderer extends DynamicBase {
+			constructor() {
+				super();
+			}
+			static tick() {
+				fetch("https://f1redude123.github.io/Vecter/OBJs/Mesh_Rat.obj").then(e => e.text()).then(t => {
+					var obj = OBJreader.readText(t);
+					var verts = obj.getVerts().map(e => e.mult(new Vector3(100, 100, 100)).add(new Vector3(xPos, yPos, zPos)).rotateX(xRot).rotateY(yRot).rotateZ(zRot)));
+					var inds = obj.getInds();
+		
+					scene.loadBuffer(0, verts, inds);
+					scene.renderBuffer(0);
+		
+					super.tick();
+				});
+			}
+		}
+	
+		GameRenderer.tick();
+	</script>
 </html>
