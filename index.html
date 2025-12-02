@@ -1,81 +1,33 @@
-<!DOCTYPE html>
-<html>
-	<head>
-    <title>Vecter Demo</title>
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto">
-		<style>
-			body {
-				font-family:"Roboto";
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-direction: column;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Vecter demo</h1>
-		<p>Move the sliders to rotate and move the rat around!</p>
-		<div id="container"></div>
-		<div style="display: flex; flex-direction: row; gap: 20px;">
-			<div>
-				<label>X position</label>
-				<input type="range" min="-300" max="300" value="0" oninput="xPos = parseInt(this.value)">
-				<br>
-				<label>Y position</label>
-				<input type="range" min="-300" max="300" value="0" oninput="yPos = parseInt(this.value)">
-				<br>
-				<label>Z position</label>
-				<input type="range" min="-300" max="300" value="0" oninput="zPos = parseInt(this.value)">
-			</div>
-			<div>
-				<label>X rotation</label>
-				<input type="range" min="0" max="360" value="0" oninput="xRot = parseInt(this.value)">
-				<br>
-				<label>Y rotation</label>
-				<input type="range" min="0" max="360" value="0" oninput="yRot = parseInt(this.value)">
-				<br>
-				<label>Z rotation</label>
-				<input type="range" min="0" max="360" value="0" oninput="zRot = parseInt(this.value)">
-			</div>
-		</div>
-	</body>
-	<script type="module">
-		import Scene from "https://f1redude123.github.io/Vecter/main.js";
-		import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
-		import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
-		import DynamicBase from "https://f1redude123.github.io/Vecter/DynamicBase.js";
-		import OBJreader from "https://f1redude123.github.io/Vecter/OBJreader.js";
+<body style="text-align:center;"></body>
+<script type="module"> // IMPORTANT: the script will not work if the type is not "module".
+import Scene from "https://f1redude123.github.io/Vecter/main.js"; // Import the necessary Vecter files
+import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
+import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
+import DynamicBase from "https://f1redude123.github.io/Vecter/DynamicBase.js";
+import OBJreader from "https://f1redude123.github.io/Vecter/OBJreader.js";
 
-		var xPos = 0;
-		var yPos = 0;
-		var zPos = 0;
-		var xRot = 0;
-		var yRot = 0;
-		var zRot = 0;
-		
-		var scene = new Scene(500, 300);
-		
-		scene.createBuffer();
-		
-		class GameRenderer extends DynamicBase {
-			constructor() {
-				super();
-			}
-			static tick() {
-				fetch("https://f1redude123.github.io/Vecter/OBJs/Mesh_Rat.obj").then(e => e.text()).then(t => {
-					var obj = OBJreader.readText(t);
-					var verts = obj.getVerts().map(e => e.mult(new Vector3(100, 100, 100)).add(new Vector3(xPos, yPos, zPos)).rotateX(xRot).rotateY(yRot).rotateZ(zRot)));
-					var inds = obj.getInds();
-		
-					scene.loadBuffer(0, verts, inds);
-					scene.renderBuffer(0);
-		
-					super.tick();
-				});
-			}
-		}
-	
-		GameRenderer.tick();
-	</script>
-</html>
+var scene = new Scene(500, 300); // Create the scene
+
+scene.createBuffer(); // Create a render buffer(buffer 0)
+
+class GameRenderer extends DynamicBase { // Create a custom class that extends DynamicBase, a class provided for frame-by-frame action, to render the game every frame
+  constructor() { // super() is not necessary here, but it's good practice
+  	super();
+  }
+  static tick() { // Override the tick() method of DynamicBase, which runs every frame. IMPORTANT: must be static.
+  	fetch("https://f1redude123.github.io/Vecter/OBJs/Mesh_Rat.obj").then(e => e.text()).then(t => {
+      var obj = OBJreader.readText(t);
+      var verts = obj.getVerts().map(e => e.rotateY(performance.now()/100));
+      var inds = obj.getInds();
+
+      scene.loadBuffer(0, verts, inds); // Load vertices and indices into buffer 0
+      scene.ctx.fillStyle = ["#f00", "#f70", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"][Math.round(performance.now()/100)%6];
+      scene.renderBuffer(0); // Render buffer 0
+
+      super.tick(); // IMPORTANT: without super.tick(), the renderer will only render one frame.
+    });
+  }
+}
+
+GameRenderer.tick(); // Start the loop!
+</script>
