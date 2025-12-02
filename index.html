@@ -1,33 +1,45 @@
 <body style="text-align:center;"></body>
-<script type="module"> // IMPORTANT: the script will not work if the type is not "module".
-import Scene from "https://f1redude123.github.io/Vecter/main.js"; // Import the necessary Vecter files
-import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
-import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
-import DynamicBase from "https://f1redude123.github.io/Vecter/DynamicBase.js";
-import OBJreader from "https://f1redude123.github.io/Vecter/OBJreader.js";
+<select id="select">
+  <option value="Mesh_Rat" selected>Rat</option>
+  <option value="rat enamy">Rat 2</option>
+  <option value="model">Tree</option>
+  <option value="cube">Cube</option>
+</select>
+<script type="module">
+  import Scene from "https://f1redude123.github.io/Vecter/main.js";
+  import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
+  import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
+  import DynamicBase from "https://f1redude123.github.io/Vecter/DynamicBase.js";
+  import OBJreader from "https://f1redude123.github.io/Vecter/OBJreader.js";
+  
+  var model = "Mesh_Rat";
 
-var scene = new Scene(500, 300); // Create the scene
-
-scene.createBuffer(); // Create a render buffer(buffer 0)
-
-class GameRenderer extends DynamicBase { // Create a custom class that extends DynamicBase, a class provided for frame-by-frame action, to render the game every frame
-  constructor() { // super() is not necessary here, but it's good practice
-  	super();
+  document.getElementById("select").onchange = function() {
+    model = this.value;
+  };
+  
+  var scene = new Scene(500, 300);
+  
+  scene.createBuffer();
+  
+  class Rat extends DynamicBase {
+    constructor() {
+    	super();
+    }
+    static tick() {
+    	fetch(`https://f1redude123.github.io/Vecter/OBJs/${model}.obj`).then(e => e.text()).then(t => {
+        var obj = OBJreader.readText(t);
+        var verts = obj.getVerts().map(e => e.rotateY(performance.now()/100));
+        var inds = obj.getInds();
+  
+        scene.loadBuffer(0, verts, inds);
+        scene.ctx.fillStyle = ["#f00", "#f70", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"][Math.round(performance.now()/100)%6];
+        scene.renderBuffer(0);
+  
+        super.tick();
+      });
+    }
   }
-  static tick() { // Override the tick() method of DynamicBase, which runs every frame. IMPORTANT: must be static.
-  	fetch("https://f1redude123.github.io/Vecter/OBJs/Mesh_Rat.obj").then(e => e.text()).then(t => {
-      var obj = OBJreader.readText(t);
-      var verts = obj.getVerts().map(e => e.rotateY(performance.now()/100));
-      var inds = obj.getInds();
-
-      scene.loadBuffer(0, verts, inds); // Load vertices and indices into buffer 0
-      scene.ctx.fillStyle = ["#f00", "#f70", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"][Math.round(performance.now()/100)%6];
-      scene.renderBuffer(0); // Render buffer 0
-
-      super.tick(); // IMPORTANT: without super.tick(), the renderer will only render one frame.
-    });
-  }
-}
-
-GameRenderer.tick(); // Start the loop!
+  
+  Rat.tick();
 </script>
