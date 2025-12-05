@@ -4,25 +4,6 @@ import Vector2 from "https://f1redude123.github.io/Vecter/Vector2.js";
 export default class RenderBuffer {
   vertices=[];
   indices=[];
-  #properties={
-    xRot: 0,
-    yRot: 0,
-    zRot: 0
-  };
-  getBufferProperties={
-    rotate: (v) => {
-      [this.#properties.xRot, this.#properties.yRot, this.#properties.zRot]=[v.x, v.y, v.z];
-    },
-    rotateX: (x) => {
-      this.#properties.xRot=x;
-    },
-    rotateY: (y) => {
-      this.#properties.yRot=y;
-    },
-    rotateZ: (z) => {
-      this.#properties.zRot=z;
-    }
-  }
   constructor(s) {
     this.scene=s;
   }
@@ -36,16 +17,20 @@ export default class RenderBuffer {
   getBufferData() {
     var data=[];
     for (var i=0;i<this.indices.length;i+=3) {
+      var p1 = this.vertices[this.indices[i]];
+      var p2 = this.vertices[this.indices[i+1]];
+      var p3 = this.vertices[this.indices[i+2]]
+      
       var poly = new Polygon(
-        this.#project(this.vertices[this.indices[i]].rotateX(this.#properties.xRot).rotateY(this.#properties.yRot).rotateZ(this.#properties.zRot)),
-        this.#project(this.vertices[this.indices[i+1]].rotateX(this.#properties.xRot).rotateY(this.#properties.yRot).rotateZ(this.#properties.zRot)),
-        this.#project(this.vertices[this.indices[i+2]].rotateX(this.#properties.xRot).rotateY(this.#properties.yRot).rotateZ(this.#properties.zRot))
+        this.#project(p1),
+        this.#project(p2),
+        this.#project(p3)
       );
       
       var normal = new Vector3(0, 0, 0);
       
-      var u = poly.p2.sub(poly.p1);
-      var v = poly.p3.sub(poly.p1);
+      var u = p2.sub(p1);
+      var v = p3.sub(p1);
       
       normal.x = u.y*v.z - u.z*v.y;
       normal.y = u.z*v.x - u.x*v.z;
