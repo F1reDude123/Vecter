@@ -36,11 +36,23 @@ export default class RenderBuffer {
   getBufferData() {
     var data=[];
     for (var i=0;i<this.indices.length;i+=3) {
-      data.push(new Polygon(
+      var poly = new Polygon(
         this.#project(this.vertices[this.indices[i]].rotateX(this.#properties.xRot).rotateY(this.#properties.yRot).rotateZ(this.#properties.zRot)),
         this.#project(this.vertices[this.indices[i+1]].rotateX(this.#properties.xRot).rotateY(this.#properties.yRot).rotateZ(this.#properties.zRot)),
         this.#project(this.vertices[this.indices[i+2]].rotateX(this.#properties.xRot).rotateY(this.#properties.yRot).rotateZ(this.#properties.zRot))
-      ));
+      );
+      
+      var normal = new Vector3(0, 0, 0);
+      
+      var u = poly.p2.sub(poly.p1);
+      var v = poly.p3.sub(poly.p1);
+      
+      normal.x = u.y*v.z - u.z*v.y;
+      normal.y = u.z*v.x - u.x*v.z;
+      normal.z = u.x*v.y - u.y*v.x;
+      poly.normal = normal;
+      
+      data.push(poly);
     }
     return data;
   }
