@@ -96,11 +96,10 @@ You can then plug these values into the `Scene.loadBuffer()` method.
 
 Additionally, you can use the JS `fetch()` function to get an OBJ file from a URL. Example:
 ```
-var verts;
-var inds;
-fetch("https://f1redude123.github.io/Vecter/OBJs/cube.obj" /* Cube OBJ file provided by Vecter */)
-  .then(page => page.text())
-  .then(text => { var obj = OBJreader.readText(text); verts = obj.getVerts(); inds = obj.getInds() });
+fetch("https://f1redude123.github.io/Vecter/OBJs/cube.obj" /* Cube OBJ file provided by Vecter */).then(page => page.text()).then(text => {
+  obj.getVerts();
+  obj.getInds();
+});
 ```
 This will fetch the example `cube.obj`, convert it to text format, and feed it into the `OBJreader`.
 
@@ -110,18 +109,16 @@ Full example:
   import Scene from "https://f1redude123.github.io/Vecter/main.js";
   import Vector3 from "https://f1redude123.github.io/Vecter/main.js";
   import OBJreader from "https://f1redude123.github.io/Vecter/main.js";
+  import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
   
   var scene = new Scene(500, 300);
 
   scene.createBuffer();
-
-  var verts;
-  var inds;
-  fetch("https://f1redude123.github.io/Vecter/OBJs/cube.obj")
-    .then(page => page.text())
-    .then(text => { var obj = OBJreader.readText(text); verts = obj.getVerts(); inds = obj.getInds() });
-
-  scene.loadBuffer(0, verts, inds);
-  scene.renderBuffer(0);
+  
+  fetch("https://f1redude123.github.io/Vecter/OBJs/cube.obj").then(page => page.text()).then(text => {
+    var obj = OBJreader.readText(text);
+    scene.loadBuffer(0, obj.getVerts(), obj.getInds());
+    scene.renderBuffer(0);
+  });
 </script>
 ```
