@@ -9,6 +9,7 @@ In order to render geometry, you must first initialize a `Scene`. This will act 
 - Width
 - Height
 - Parent element(optional)
+
 If the parent element is unspecified, it will default to the document body. Scene creation example:
 ```
 var scene = new Scene(500, 300);
@@ -38,6 +39,7 @@ After the vertices and indices have been created, they need to be loaded into th
 - Buffer index
 - Vertices
 - Indices
+
 The syntax here is simple:
 ```
 scene.loadBuffer(0 /* We've only created one buffer, so index is 0 */, vertices, indices);
@@ -45,6 +47,7 @@ scene.loadBuffer(0 /* We've only created one buffer, so index is 0 */, vertices,
 Now that you've loaded in your vertices and indices, the buffer is ready to be rendered with `Scene.renderBuffer()`. The method takes one argument:
 
 - Buffer index
+
 Example:
 ```
 scene.renderBuffer(0);
