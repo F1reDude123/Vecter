@@ -1,5 +1,6 @@
 import Polygon from "https://f1redude123.github.io/Vecter/Polygon.js";
 import Vector2 from "https://f1redude123.github.io/Vecter/Vector2.js";
+import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
 
 export default class RenderBuffer {
   vertices=[];
