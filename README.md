@@ -107,8 +107,8 @@ Full example:
 ```
 <script type="module">
   import Scene from "https://f1redude123.github.io/Vecter/main.js";
-  import Vector3 from "https://f1redude123.github.io/Vecter/main.js";
-  import OBJreader from "https://f1redude123.github.io/Vecter/main.js";
+  import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
+  import OBJreader from "https://f1redude123.github.io/Vecter/OBJreader.js";
   import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
   
   var scene = new Scene(500, 300);
