@@ -27,6 +27,10 @@ export default class RenderBuffer {
         this.#project(p2),
         this.#project(p3)
       );
+
+      if (poly.p1 < -this.scene.fov+1 || poly.p2 < -this.scene.fov+1 || poly.p3 < this.scene.fov+1) {
+        continue;
+      }
       
       var normal = new Vector3(0, 0, 0);
       
