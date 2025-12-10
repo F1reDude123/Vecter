@@ -20,7 +20,11 @@ export default class RenderBuffer {
     for (var i=0;i<this.indices.length;i+=3) {
       var p1 = this.vertices[this.indices[i]];
       var p2 = this.vertices[this.indices[i+1]];
-      var p3 = this.vertices[this.indices[i+2]]
+      var p3 = this.vertices[this.indices[i+2]];
+      
+      if (p1.z < -this.scene.fov+1 && p2.z < -this.scene.fov+1 && p3.z < -this.scene.fov+1) {
+        continue;
+      }
       
       if (p1.z < -this.scene.fov+1) {
         p1.z = -this.scene.fov+1;
@@ -31,6 +35,7 @@ export default class RenderBuffer {
       if (p3.z < -this.scene.fov+1) {
         p3.z = -this.scene.fov+1;
       }
+      
       
       var poly = new Polygon(
         this.#project(p1),
