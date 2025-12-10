@@ -22,7 +22,7 @@ export default class RenderBuffer {
       var p2 = this.vertices[this.indices[i+1]];
       var p3 = this.vertices[this.indices[i+2]]
 
-      if (p1.z < -this.scene.fov+1 || p2.z < -this.scene.fov+1 || p3.z < this.scene.fov+1) {
+      if (p1.z < -this.scene.fov+1 || p2.z < -this.scene.fov+1 || p3.z < -this.scene.fov+1) {
         continue;
       }
       
