@@ -1,0 +1,147 @@
+<script type="module">
+import Scene from "https://f1redude123.github.io/Vecter/main.js";
+import Vector3 from "https://f1redude123.github.io/Vecter/Vector3.js";
+import RenderBuffer from "https://f1redude123.github.io/Vecter/RenderBuffer.js";
+import DynamicBase from "https://f1redude123.github.io/Vecter/DynamicBase.js";
+
+/* SMALLNOISE SETUP */
+var c1 = document.createElement("canvas");
+c1.width = 16;
+c1.height = 16;
+var ctx1 = c1.getContext("2d");
+
+var c2 = document.createElement("canvas");
+c2.width = 160;
+c2.height = 160;
+var ctx2 = c2.getContext("2d");
+
+for (var x = 0; x < 16; x++) {
+  for (var y = 0; y < 16; y++) {
+  	var rand = Math.random()*255;
+    ctx1.fillStyle = `rgb(${rand}, ${rand}, ${rand})`;
+    ctx1.fillRect(x, y, 1, 1);
+  }
+}
+
+ctx2.drawImage(c1, 0, 0, 320, 320);
+
+function getNoise2D(x, y) {
+  return ctx2.getImageData(x, y, 1, 1).data[0];
+}
+
+/* SCENE INIT */
+var scene = new Scene(500, 500);
+scene.canvas.onclick = function() { this.requestPointerLock(); };
+
+var pos = new Vector3(0, 100, 0);
+var rot = new Vector3(0, 0, 0);
+
+scene.createBuffer();
+
+class LevelRenderer extends DynamicBase {
+  constructor() {}
+  static tick() {
+  	var verts = [];
+    var inds = [];
+    
+    var idx = 0;
+    for (var x = 0; x < 3200; x += 200) {
+      for (var z = 0; z < 3200; z += 200) {
+        var h = Math.floor((getNoise2D(x/20, z/20)*2)/200)*200;
+        verts.push(new Vector3(x-100, h+100, z-100));
+        verts.push(new Vector3(x+100, h+100, z-100));
+        verts.push(new Vector3(x+100, h+100, z+100));
+        verts.push(new Vector3(x-100, h+100, z+100));
+
+        verts.push(new Vector3(x-100, h-100, z-100));
+        verts.push(new Vector3(x+100, h-100, z-100));
+        verts.push(new Vector3(x+100, h-100, z+100));
+        verts.push(new Vector3(x-100, h-100, z+100));
+
+        // Top face
+        inds.push(idx);
+        inds.push(idx+1);
+        inds.push(idx+2);
+        inds.push(idx+2);
+        inds.push(idx+3);
+        inds.push(idx);
+
+        // Bottom face
+        inds.push(idx+4);
+        inds.push(idx+5);
+        inds.push(idx+6);
+        inds.push(idx+6);
+        inds.push(idx+7);
+        inds.push(idx+4);
+
+        // Right face
+        inds.push(idx+1);
+        inds.push(idx+2);
+        inds.push(idx+6);
+        inds.push(idx+6);
+        inds.push(idx+5);
+        inds.push(idx+1);
+
+        // Left face
+        inds.push(idx);
+        inds.push(idx+3);
+        inds.push(idx+7);
+        inds.push(idx+7);
+        inds.push(idx+4);
+        inds.push(idx);
+
+        // Front face
+        inds.push(idx);
+        inds.push(idx+1);
+        inds.push(idx+5);
+        inds.push(idx+5);
+        inds.push(idx+4);
+        inds.push(idx);
+
+        // Back face
+        inds.push(idx+3);
+        inds.push(idx+2);
+        inds.push(idx+6);
+        inds.push(idx+6);
+        inds.push(idx+7);
+        inds.push(idx+3);
+
+        idx += 8;
+      }
+    }
+    
+    scene.loadBuffer(0, verts.map(e => e.rotateX(rot.x).rotateY(rot.y).rotateZ(rot.z).sub(pos)), inds);
+    scene.renderBuffer(0);
+    
+    super.tick();
+  }
+}
+
+LevelRenderer.tick();
+
+window.addEventListener("keydown", function(e) {
+  switch (e.key) {
+  	case "w":
+      pos.z += 10;
+      break;
+    case "s":
+      pos.z -= 10;
+      break;
+    case "d":
+      pos.x += 10;
+      break;
+    case "a":
+      pos.x -= 10;
+      break;
+    case " ":
+      pos.y += 10;
+      break;
+    case "Shift":
+      pos.y -= 10;
+      break;
+  }
+});
+window.addEventListener("mousemove", function(e) {
+  rot.y -= e.movementX*0.003;
+});
+</script>
